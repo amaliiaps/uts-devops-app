@@ -8,6 +8,18 @@
     "test": "echo 'Semua test berhasil dijalankan!' && exit 0"
   },
   "dependencies": {
-    "express": "^4.18.2"
-  }
+    "express": "^4.22.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amaliiaps/uts-devops-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/amaliiaps/uts-devops-app/issues"
+  },
+  "homepage": "https://github.com/amaliiaps/uts-devops-app#readme"
 }
