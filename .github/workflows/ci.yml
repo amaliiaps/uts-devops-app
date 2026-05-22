@@ -58,8 +58,8 @@ jobs:
         context: .
         push: true
         tags: |
-          ghcr.io/${{ github.repository }}:latest
-          ghcr.io/${{ github.repository }}:${{ github.sha }}
+          ghcr.io/${{ github.repository_owner }}/uts-devops-app:latest
+          ghcr.io/${{ github.repository_owner }}/uts-devops-app:${{ github.sha }}
   
   # JOB 3: Deploy ke Staging (Simulasi)
   deploy-staging:
@@ -71,6 +71,6 @@ jobs:
     - name: Simulasi deployment ke staging
       run: |
         echo "🚀 Deploying ke environment staging..."
-        echo "Image: ghcr.io/${{ github.repository }}:${{ github.sha }}"
+        echo "Image: ghcr.io/${{ github.repository_owner }}/uts-devops-app:${{ github.sha }}"
         echo "✅ Deployment ke staging berhasil!"
         echo "🌐 Aplikasi bisa diakses di: http://staging.uts-devops-app.local (simulasi)"
