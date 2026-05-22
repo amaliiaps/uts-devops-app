@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
@@ -6,7 +6,11 @@ on:
   pull_request:
     branches: [ "development" ]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
+  # JOB 1: Continuous Integration (Test)
   test:
     runs-on: ubuntu-latest
     
@@ -20,10 +24,53 @@ jobs:
         node-version: '18.x'
     
     - name: Install dependencies
-      run: npm ci
+      run: npm install
       
     - name: Jalankan unit test
       run: npm test
+    
+    - name: Tampilkan pesan sukses CI
+      run: echo "✅ CI berhasil untuk branch ${{ github.ref_name }}"
+  
+  # JOB 2: Build Docker Image
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout kode
+      uses: actions/checkout@v4
       
-    - name: Tampilkan pesan sukses
-      run: echo "✅ Pipeline CI berhasil dijalankan untuk branch ${{ github.ref_name }}"
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: Login ke GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      
+    - name: Build dan push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: |
+          ghcr.io/${{ github.repository }}:latest
+          ghcr.io/${{ github.repository }}:${{ github.sha }}
+  
+  # JOB 3: Deploy ke Staging (Simulasi)
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Simulasi deployment ke staging
+      run: |
+        echo "🚀 Deploying ke environment staging..."
+        echo "Image: ghcr.io/${{ github.repository }}:${{ github.sha }}"
+        echo "✅ Deployment ke staging berhasil!"
+        echo "🌐 Aplikasi bisa diakses di: http://staging.uts-devops-app.local (simulasi)"
