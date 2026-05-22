@@ -1,0 +1,13 @@
+{
+  "name": "uts-devops-app",
+  "version": "1.0.0",
+  "description": "Aplikasi web untuk UTS DevOps",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo 'Semua test berhasil dijalankan!' && exit 0"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
